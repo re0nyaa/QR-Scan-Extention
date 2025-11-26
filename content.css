@@ -1,195 +1,230 @@
 .qr-selection-overlay {
-  position: fixed;
-  top: 0;
-  left: 0;
-  width: 100vw;
-  height: 100vh;
-  z-index: 999999999;
-  cursor: crosshair;
-  background: rgba(0, 0, 0, 0.3);
+  position: fixed !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100vw !important;
+  height: 100vh !important;
+  z-index: 2147483647 !important;
+  cursor: crosshair !important;
+  background: rgba(0, 0, 0, 0.3) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
 }
 
 .qr-freeze-image {
-  position: absolute;
-  top: 0;
-  left: 0;
-  width: 100%;
-  height: 100%;
-  object-fit: cover;
-  pointer-events: none;
-  z-index: 1;
+  position: absolute !important;
+  top: 0 !important;
+  left: 0 !important;
+  width: 100% !important;
+  height: 100% !important;
+  object-fit: cover !important;
+  pointer-events: none !important;
+  z-index: 1 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-sizing: border-box !important;
 }
 
 .qr-instruction-text {
-  position: fixed;
-  top: 10px;
-  left: 50%;
-  transform: translateX(-50%);
-  background: rgba(0, 0, 0, 0.7);
-  color: white;
-  padding: 12px 24px;
-  border-radius: 8px;
-  font-size: 18px;
-  font-weight: 500;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  z-index: 999999999;
-  pointer-events: none;
-  backdrop-filter: blur(10px);
-  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-  animation: instructionFadeIn 0.3s ease-out;
+  position: fixed !important;
+  top: 10px !important;
+  left: 50% !important;
+  transform: translateX(-50%) !important;
+  background: rgba(0, 0, 0, 0.7) !important;
+  color: white !important;
+  padding: 12px 24px !important;
+  border-radius: 8px !important;
+  font-size: 18px !important;
+  font-weight: 500 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  z-index: 2147483647 !important;
+  pointer-events: none !important;
+  backdrop-filter: blur(10px) !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  animation: instructionFadeIn 0.3s ease-out !important;
+  margin: 0 !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
 }
 
 @keyframes instructionFadeIn {
   from {
-    opacity: 0;
-    transform: translateX(-50%) translateY(-10px);
+    opacity: 0 !important;
+    transform: translateX(-50%) translateY(-10px) !important;
   }
   to {
-    opacity: 1;
-    transform: translateX(-50%) translateY(0);
+    opacity: 1 !important;
+    transform: translateX(-50%) translateY(0) !important;
   }
 }
 
-
 .qr-selection-box {
-  position: absolute;
-  border: 2px solid #ffffff;
-  background: rgba(255, 255, 255, 0.1);
-  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5);
-  pointer-events: none;
-  z-index: 2;
+  position: absolute !important;
+  border: 2px solid #ffffff !important;
+  background: rgba(255, 255, 255, 0.1) !important;
+  box-shadow: 0 0 0 9999px rgba(0, 0, 0, 0.5) !important;
+  pointer-events: none !important;
+  z-index: 2 !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  box-sizing: border-box !important;
 }
 
 .qr-result-popup {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  background: white;
-  padding: 15px;
-  border-radius: 8px;
-  box-shadow: 0 4px 12px rgba(0,0,0,0.15);
-  z-index: 1000000;
-  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
-  max-width: 500px;
-  word-break: break-all;
-  animation: slideIn 0.3s ease-out;
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  background: white !important;
+  padding: 15px !important;
+  border-radius: 8px !important;
+  box-shadow: 0 4px 12px rgba(0,0,0,0.15) !important;
+  z-index: 2147483647 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  max-width: 500px !important;
+  word-break: break-all !important;
+  animation: slideIn 0.3s ease-out !important;
+  margin: 0 !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  color: #333 !important;
+  font-size: 14px !important;
+  line-height: 1.5 !important;
 }
 
 @keyframes slideIn {
-  from { transform: translateX(100%); opacity: 0; }
-  to { transform: translateX(0); opacity: 1; }
+  from { 
+    transform: translateX(100%) !important; 
+    opacity: 0 !important; 
+  }
+  to { 
+    transform: translateX(0) !important; 
+    opacity: 1 !important; 
+  }
 }
 
 .qr-result-popup h3 {
-  margin: 0 0 10px 0;
-  font-size: 16px;
-  color: #333;
-  padding-right: 35px;
+  display: block !important;
+  margin: 0 0 10px 0 !important;
+  font-size: 16px !important;
+  color: #333 !important;
+  padding: 0 !important;
+  padding-right: 35px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 600 !important;
+  line-height: 1.4 !important;
+  box-sizing: border-box !important;
+  border: none !important;
 }
 
 .qr-result-popup p {
-  margin: 0 0 10px 0;
-  font-size: 14px;
-  color: #666;
+  display: block !important;
+  margin: 0 0 10px 0 !important;
+  padding: 0 !important;
+  font-size: 14px !important;
+  color: #666 !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  line-height: 1.5 !important;
+  word-break: break-all !important;
+  box-sizing: border-box !important;
+  border: none !important;
 }
 
 .qr-result-popup button {
-  background: #007bff;
-  color: white;
-  border: none;
-  padding: 6px 12px;
-  border-radius: 4px;
-  cursor: pointer;
-  font-size: 12px;
+  display: inline-block !important;
+  background: #007bff !important;
+  color: white !important;
+  border: none !important;
+  padding: 6px 12px !important;
+  margin: 0 !important;
+  border-radius: 4px !important;
+  cursor: pointer !important;
+  font-size: 12px !important;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif !important;
+  font-weight: 500 !important;
+  line-height: 1.4 !important;
+  text-align: center !important;
+  box-sizing: border-box !important;
+  transition: background 0.2s ease !important;
 }
 
 .qr-result-popup button:hover {
-  background: #0056b3;
+  background: #0056b3 !important;
 }
 
 .qr-result-popup .close-btn {
-  position: absolute;
-  top: 8px;
-  right: 8px;
-  width: 28px;
-  height: 28px;
-  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%);
-  color: #666;
-  font-size: 22px;
-  padding: 0;
-  border-radius: 50%;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1);
-  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08);
-  font-weight: 400;
-  line-height: 0;
-  transform-origin: center center;
-  font-family: Arial, sans-serif;
+  all: initial !important;
+  position: absolute !important;
+  top: 8px !important;
+  right: 8px !important;
+  width: 28px !important;
+  height: 28px !important;
+  background: linear-gradient(135deg, #f5f5f5 0%, #e8e8e8 100%) !important;
+  color: #666 !important;
+  font-size: 22px !important;
+  padding: 0 !important;
+  margin: 0 !important;
+  border-radius: 50% !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  transition: all 0.2s cubic-bezier(0.4, 0, 0.2, 1) !important;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.08) !important;
+  font-weight: 400 !important;
+  line-height: 0 !important;
+  transform-origin: center center !important;
+  font-family: Arial, sans-serif !important;
+  cursor: pointer !important;
+  border: none !important;
+  box-sizing: border-box !important;
 }
 
 .qr-result-popup .close-btn:hover {
-  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%);
-  color: white;
-  transform: rotate(90deg);
-  box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3);
-}
-
-.qr-settings-btn {
-  position: fixed;
-  top: 20px;
-  left: 20px;
-  width: 40px;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 20px;
-  cursor: pointer;
-  z-index: 999999999;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
-}
-
-.qr-settings-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-  transform: scale(1.1) rotate(45deg);
-}
-
-.qr-settings-btn:active {
-  transform: scale(0.95) rotate(45deg);
+  background: linear-gradient(135deg, #ff6b6b 0%, #ee5a52 100%) !important;
+  color: white !important;
+  transform: rotate(90deg) !important;
+  box-shadow: 0 4px 8px rgba(255, 107, 107, 0.3) !important;
 }
   
 .qr-close-btn {
-  position: fixed;
-  top: 20px;
-  right: 20px;
-  width: 40px;
-  height: 40px;
-  background: rgba(0, 0, 0, 0.6);
-  border-radius: 50%;
-  color: white;
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 24px;
-  cursor: pointer;
-  z-index: 999999999;
-  transition: all 0.2s ease;
-  backdrop-filter: blur(4px);
-  box-shadow: 0 2px 8px rgba(0,0,0,0.2);
+  all: initial !important;
+  position: fixed !important;
+  top: 20px !important;
+  right: 20px !important;
+  width: 40px !important;
+  height: 40px !important;
+  background: rgba(0, 0, 0, 0.6) !important;
+  border-radius: 50% !important;
+  color: white !important;
+  display: flex !important;
+  align-items: center !important;
+  justify-content: center !important;
+  font-size: 24px !important;
+  cursor: pointer !important;
+  z-index: 2147483647 !important;
+  transition: all 0.2s ease !important;
+  backdrop-filter: blur(4px) !important;
+  box-shadow: 0 2px 8px rgba(0,0,0,0.2) !important;
+  margin: 0 !important;
+  padding: 0 !important;
+  border: none !important;
+  box-sizing: border-box !important;
+  font-family: Arial, sans-serif !important;
+  line-height: 1 !important;
 }
 
 .qr-close-btn:hover {
-  background: rgba(0, 0, 0, 0.8);
-  transform: scale(1.1);
+  all: initial !important;
+  background: rgba(0, 0, 0, 0.8) !important;
+  transform: scale(1.1) !important;
 }
 
 .qr-close-btn:active {
-  transform: scale(0.95);
+  all: initial !important;
+  transform: scale(0.95) !important;
 }
