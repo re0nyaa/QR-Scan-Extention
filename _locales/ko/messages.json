@@ -1,0 +1,42 @@
+{
+  "extName": {
+    "message": "QR 코드 리더",
+    "description": "확장 프로그램 이름"
+  },
+  "extDescription": {
+    "message": "화면에서 영역을 선택하여 QR 코드를 스캔합니다.",
+    "description": "확장 프로그램 설명"
+  },
+  "actionTitle": {
+    "message": "QR 코드 스캔",
+    "description": "확장 프로그램 액션 버튼 제목"
+  },
+  "instructionText": {
+    "message": "드래그하여 QR 코드 스캔",
+    "description": "오버레이에 표시되는 안내 텍스트"
+  },
+  "resultTitle": {
+    "message": "QR 코드 결과",
+    "description": "결과 팝업 제목"
+  },
+  "noQrFound": {
+    "message": "QR 코드를 찾을 수 없습니다.",
+    "description": "QR 코드가 감지되지 않았을 때 메시지"
+  },
+  "copyButton": {
+    "message": "복사",
+    "description": "복사 버튼 텍스트"
+  },
+  "copiedButton": {
+    "message": "복사됨!",
+    "description": "복사 후 표시되는 텍스트"
+  },
+  "openButton": {
+    "message": "열기",
+    "description": "URL 열기 버튼 텍스트"
+  },
+  "scanAgainButton": {
+    "message": "다시 스캔",
+    "description": "다시 스캔 버튼 텍스트"
+  }
+}

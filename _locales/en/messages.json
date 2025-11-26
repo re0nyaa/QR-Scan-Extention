@@ -1,0 +1,42 @@
+{
+  "extName": {
+    "message": "QR Code Reader",
+    "description": "Name of the extension"
+  },
+  "extDescription": {
+    "message": "Select an area on the screen to scan a QR code.",
+    "description": "Description of the extension"
+  },
+  "actionTitle": {
+    "message": "Scan QR Code",
+    "description": "Title for the extension action button"
+  },
+  "instructionText": {
+    "message": "Drag to Scan QR Code",
+    "description": "Instruction text shown in the overlay"
+  },
+  "resultTitle": {
+    "message": "QR Code Result",
+    "description": "Title of the result popup"
+  },
+  "noQrFound": {
+    "message": "No QR code found.",
+    "description": "Message when no QR code is detected"
+  },
+  "copyButton": {
+    "message": "Copy",
+    "description": "Copy button text"
+  },
+  "copiedButton": {
+    "message": "Copied!",
+    "description": "Text shown after copying"
+  },
+  "openButton": {
+    "message": "Open",
+    "description": "Open URL button text"
+  },
+  "scanAgainButton": {
+    "message": "Scan Again",
+    "description": "Scan again button text"
+  }
+}
