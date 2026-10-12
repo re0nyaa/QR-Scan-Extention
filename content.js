@@ -98,10 +98,7 @@
         const width = Math.abs(endX - startX)
         const height = Math.abs(endY - startY)
 
-        selectionBox.style.left = left + "px"
-        selectionBox.style.top = top + "px"
-        selectionBox.style.width = width + "px"
-        selectionBox.style.height = height + "px"
+        selectionBox.style.cssText = `left:${left}px;top:${top}px;width:${width}px;height:${height}px;display:block;`
     }
 
     function onMouseUp(e) {
@@ -125,15 +122,17 @@
         }
     }
 
+    const barcodeDetector =
+        "BarcodeDetector" in window
+            ? new BarcodeDetector({ formats: ["qr_code"] })
+            : null
+
     async function scanCanvasOrData(canvas, customImageData) {
-        if ("BarcodeDetector" in window && canvas) {
+        if (barcodeDetector && canvas) {
             try {
-                const detector = new BarcodeDetector({ formats: ["qr_code"] })
-                const barcodes = await detector.detect(canvas)
-                if (barcodes && barcodes.length > 0 && barcodes[0].rawValue) {
-                    return barcodes[0].rawValue
-                }
-            } catch (e) {}
+                const barcodes = await barcodeDetector.detect(canvas)
+                if (barcodes[0]?.rawValue) return barcodes[0].rawValue
+            } catch {}
         }
         const imgData =
             customImageData ||
@@ -150,24 +149,27 @@
         let res = await scanCanvasOrData(canvas)
         if (res) return res
 
-        if (canvas.width > 1000 || canvas.height > 1000) {
+        const width = canvas.width
+        const height = canvas.height
+
+        if (width > 1000 || height > 1000) {
             const downCanvas = document.createElement("canvas")
-            downCanvas.width = Math.round(canvas.width * 0.5)
-            downCanvas.height = Math.round(canvas.height * 0.5)
+            downCanvas.width = width >> 1
+            downCanvas.height = height >> 1
             const downCtx = downCanvas.getContext("2d")
             downCtx.drawImage(canvas, 0, 0, downCanvas.width, downCanvas.height)
             res = await scanCanvasOrData(downCanvas)
             if (res) return res
         }
 
-        if (canvas.width < 300 || canvas.height < 300) {
+        if (width < 300 || height < 300) {
             const scale = Math.max(
                 2,
-                Math.ceil(300 / Math.min(canvas.width, canvas.height)),
+                Math.ceil(300 / Math.min(width, height)),
             )
             const upCanvas = document.createElement("canvas")
-            upCanvas.width = canvas.width * scale
-            upCanvas.height = canvas.height * scale
+            upCanvas.width = width * scale
+            upCanvas.height = height * scale
             const upCtx = upCanvas.getContext("2d")
             upCtx.imageSmoothingEnabled = false
             upCtx.drawImage(canvas, 0, 0, upCanvas.width, upCanvas.height)
@@ -176,24 +178,25 @@
         }
 
         const ctx = canvas.getContext("2d")
-        const width = canvas.width
-        const height = canvas.height
         const origData = ctx.getImageData(0, 0, width, height)
         const d = origData.data
+        const len = d.length
 
         const sharpData = ctx.createImageData(width, height)
         const sd = sharpData.data
+        const rowStride = width << 2
         for (let y = 1; y < height - 1; y++) {
+            const yOffset = y * rowStride
             for (let x = 1; x < width - 1; x++) {
-                const idx = (y * width + x) * 4
+                const idx = yOffset + (x << 2)
                 for (let c = 0; c < 3; c++) {
                     const val =
                         5 * d[idx + c] -
-                        d[((y - 1) * width + x) * 4 + c] -
-                        d[((y + 1) * width + x) * 4 + c] -
-                        d[(y * width + (x - 1)) * 4 + c] -
-                        d[(y * width + (x + 1)) * 4 + c]
-                    sd[idx + c] = Math.min(255, Math.max(0, val))
+                        d[idx - rowStride + c] -
+                        d[idx + rowStride + c] -
+                        d[idx - 4 + c] -
+                        d[idx + 4 + c]
+                    sd[idx + c] = val < 0 ? 0 : val > 255 ? 255 : val
                 }
                 sd[idx + 3] = 255
             }
@@ -201,34 +204,33 @@
         res = await scanCanvasOrData(null, sharpData)
         if (res) return res
 
-        const contrastData = ctx.createImageData(width, height)
-        const cd = contrastData.data
-        let min = 255,
-            max = 0
-        for (let i = 0; i < d.length; i += 4) {
-            const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]
+        let min = 255
+        let max = 0
+        for (let i = 0; i < len; i += 4) {
+            const gray = (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29) >> 8
             if (gray < min) min = gray
             if (gray > max) max = gray
         }
+
+        const contrastData = ctx.createImageData(width, height)
+        const cd = contrastData.data
         const range = max - min || 1
-        for (let i = 0; i < d.length; i += 4) {
-            const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]
-            const norm = Math.min(
-                255,
-                Math.max(0, ((gray - min) / range) * 255),
-            )
-            cd[i] = cd[i + 1] = cd[i + 2] = norm
+        for (let i = 0; i < len; i += 4) {
+            const gray = (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29) >> 8
+            const norm = (((gray - min) * 255) / range) | 0
+            const val = norm < 0 ? 0 : norm > 255 ? 255 : norm
+            cd[i] = cd[i + 1] = cd[i + 2] = val
             cd[i + 3] = 255
         }
         res = await scanCanvasOrData(null, contrastData)
         if (res) return res
 
-        const thresholds = [(min + max) / 2, 90, 165]
+        const binData = ctx.createImageData(width, height)
+        const bd = binData.data
+        const thresholds = [(min + max) >> 1, 90, 165]
         for (const th of thresholds) {
-            const binData = ctx.createImageData(width, height)
-            const bd = binData.data
-            for (let i = 0; i < d.length; i += 4) {
-                const gray = 0.299 * d[i] + 0.587 * d[i + 1] + 0.114 * d[i + 2]
+            for (let i = 0; i < len; i += 4) {
+                const gray = (d[i] * 77 + d[i + 1] * 150 + d[i + 2] * 29) >> 8
                 const val = gray >= th ? 255 : 0
                 bd[i] = bd[i + 1] = bd[i + 2] = val
                 bd[i + 3] = 255
@@ -237,20 +239,15 @@
             if (res) return res
         }
 
-        const angles = [90, 180, 270]
-        for (const angle of angles) {
-            const rotCanvas = document.createElement("canvas")
-            const rotCtx = rotCanvas.getContext("2d")
-            if (angle === 90 || angle === 270) {
-                rotCanvas.width = height
-                rotCanvas.height = width
-            } else {
-                rotCanvas.width = width
-                rotCanvas.height = height
-            }
-            rotCtx.translate(rotCanvas.width / 2, rotCanvas.height / 2)
+        const rotCanvas = document.createElement("canvas")
+        const rotCtx = rotCanvas.getContext("2d")
+        for (const angle of [90, 180, 270]) {
+            const swap = angle === 90 || angle === 270
+            rotCanvas.width = swap ? height : width
+            rotCanvas.height = swap ? width : height
+            rotCtx.translate(rotCanvas.width * 0.5, rotCanvas.height * 0.5)
             rotCtx.rotate((angle * Math.PI) / 180)
-            rotCtx.drawImage(canvas, -width / 2, -height / 2)
+            rotCtx.drawImage(canvas, -width * 0.5, -height * 0.5)
             res = await scanCanvasOrData(rotCanvas)
             if (res) return res
         }
@@ -324,11 +321,7 @@
                 result = await decodeQRFromCanvas(canvas)
             }
 
-            if (result) {
-                showResult(result)
-            } else {
-                showResult("No QR code found.")
-            }
+            showResult(result || "No QR code found.")
         }
         img.src = dataUrl
     }

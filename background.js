@@ -1,62 +1,46 @@
 chrome.action.onClicked.addListener(async (tab) => {
-    if (!tab.url || !/^https?:/.test(tab.url)) {
-        console.warn("Cannot scan QR codes on this page type:", tab.url)
-        return
-    }
+    const isScanable =
+        tab.url &&
+        (/^https?:/.test(tab.url) ||
+            tab.url.startsWith("file:") ||
+            tab.url.startsWith(chrome.runtime.getURL("")))
+    if (!isScanable) return
 
-    chrome.tabs.captureVisibleTab(
-        null,
-        { format: "png" },
-        (screenshotDataUrl) => {
-            if (chrome.runtime.lastError) {
-                console.error(
-                    "Screenshot capture failed:",
-                    chrome.runtime.lastError.message,
-                )
-                return
-            }
+    try {
+        const screenshotDataUrl = await chrome.tabs.captureVisibleTab(null, {
+            format: "png",
+        })
 
+        await Promise.all([
             chrome.scripting.executeScript({
                 target: { tabId: tab.id },
                 files: ["jsQR.js", "content.js"],
-            })
-            chrome.scripting
-                .insertCSS({
-                    target: { tabId: tab.id },
-                    files: ["content.css"],
-                })
-                .then(() => {
-                    setTimeout(() => {
-                        chrome.tabs.sendMessage(tab.id, {
-                            action: "START_SELECTION",
-                            screenshotDataUrl: screenshotDataUrl,
-                        })
-                    }, 100)
-                })
-        },
-    )
+            }),
+            chrome.scripting.insertCSS({
+                target: { tabId: tab.id },
+                files: ["content.css"],
+            }),
+        ])
+
+        chrome.tabs.sendMessage(tab.id, {
+            action: "START_SELECTION",
+            screenshotDataUrl,
+        })
+    } catch (e) {}
 })
 
-chrome.runtime.onMessage.addListener((request, sender, sendResponse) => {
-    if (request.action === "REQUEST_NEW_CAPTURE") {
-        chrome.tabs.captureVisibleTab(
-            null,
-            { format: "png" },
-            (screenshotDataUrl) => {
-                if (chrome.runtime.lastError) {
-                    console.error(
-                        "Screenshot capture failed:",
-                        chrome.runtime.lastError.message,
-                    )
-                    return
-                }
-
-                chrome.tabs.sendMessage(sender.tab.id, {
-                    action: "START_SELECTION",
-                    screenshotDataUrl: screenshotDataUrl,
-                })
-            },
-        )
+chrome.runtime.onMessage.addListener(async (request, sender) => {
+    if (request.action === "REQUEST_NEW_CAPTURE" && sender.tab?.id) {
+        try {
+            const screenshotDataUrl = await chrome.tabs.captureVisibleTab(
+                null,
+                { format: "png" },
+            )
+            chrome.tabs.sendMessage(sender.tab.id, {
+                action: "START_SELECTION",
+                screenshotDataUrl,
+            })
+        } catch (e) {}
     }
 })
 
