@@ -1,7 +1,7 @@
 {
     "manifest_version": 3,
     "name": "QR Code Reader",
-    "version": "1.1.1",
+    "version": "1.2.0",
     "description": "Select an area on the screen to scan a QR code.",
     "permissions": ["activeTab", "scripting"],
     "default_locale": "en",
