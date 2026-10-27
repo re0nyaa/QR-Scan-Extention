@@ -122,10 +122,32 @@
         }
     }
 
-    const barcodeDetector =
-        "BarcodeDetector" in window
-            ? new BarcodeDetector({ formats: ["qr_code"] })
-            : null
+    const barcodeFormats = [
+        "aztec",
+        "code_128",
+        "code_39",
+        "code_93",
+        "codabar",
+        "data_matrix",
+        "ean_13",
+        "ean_8",
+        "itf",
+        "pdf417",
+        "qr_code",
+        "upc_a",
+        "upc_e",
+    ]
+
+    let barcodeDetector = null
+    if ("BarcodeDetector" in window) {
+        try {
+            barcodeDetector = new BarcodeDetector({ formats: barcodeFormats })
+        } catch {
+            try {
+                barcodeDetector = new BarcodeDetector()
+            } catch {}
+        }
+    }
 
     async function scanCanvasOrData(canvas, customImageData) {
         if (barcodeDetector && canvas) {
@@ -321,7 +343,7 @@
                 result = await decodeQRFromCanvas(canvas)
             }
 
-            showResult(result || "No QR code found.")
+            showResult(result || "No code found.")
         }
         img.src = dataUrl
     }
@@ -336,7 +358,7 @@
         popup.className = "qr-result-popup"
 
         const title = document.createElement("h3")
-        title.innerText = "QR Code Result"
+        title.innerText = "Scan Result"
         popup.appendChild(title)
 
         const content = document.createElement("p")
@@ -359,7 +381,7 @@
         buttonContainer.style.gap = "10px"
         buttonContainer.style.flexWrap = "wrap"
 
-        if (text !== "No QR code found.") {
+        if (text !== "No code found." && text !== "No QR code found.") {
             const copyBtn = document.createElement("button")
             copyBtn.innerText = "Copy"
             copyBtn.onclick = () => {
